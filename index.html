@@ -1,0 +1,1727 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0d12">
+  <title>El Index | Prescritos</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f4f0e8;
+      --ink: #18332f;
+      --muted: #65736e;
+      --line: #d8ddd4;
+      --green: #166b55;
+      --green-dark: #105241;
+      --lime: #d4f05a;
+      --coral: #f0785f;
+      --white: #fffefa;
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--ink);
+      background: #000;
+    }
+
+    button, input { font: inherit; }
+    button { color: inherit; }
+
+    .page {
+      width: min(1080px, 100%);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 34px clamp(20px, 5vw, 64px) 28px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 25px;
+      border-bottom: 1px solid rgba(24, 51, 47, .18);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+
+    .brand-mark {
+      width: 28px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--ink);
+      background: var(--lime);
+      font-size: 17px;
+    }
+
+    .top-note {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    main { flex: 1; }
+
+    .intro {
+      max-width: 670px;
+      padding: clamp(36px, 8vh, 78px) 0 36px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 15px;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+    }
+
+    .eyebrow::before {
+      width: 22px;
+      height: 2px;
+      background: var(--coral);
+      content: "";
+    }
+
+    h1 {
+      max-width: 650px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(44px, 8vw, 82px);
+      font-weight: 500;
+      line-height: .98;
+    }
+
+    h1 span { color: var(--green); font-style: italic; }
+
+    .subtitle {
+      max-width: 450px;
+      margin: 20px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, .82fr);
+      gap: clamp(22px, 5vw, 60px);
+      align-items: start;
+      padding: 30px 0 45px;
+      border-top: 1px solid rgba(24, 51, 47, .18);
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 17px;
+    }
+
+    h2 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 24px;
+      font-weight: 500;
+    }
+
+    .count {
+      color: var(--muted);
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .add-form {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 13px;
+    }
+
+    .add-form input {
+      width: 100%;
+      min-width: 0;
+      height: 48px;
+      padding: 0 15px;
+      border: 1px solid #bac6bb;
+      border-radius: 4px;
+      outline: none;
+      color: var(--ink);
+      background: var(--white);
+      transition: border-color .16s, box-shadow .16s;
+    }
+
+    .add-form input::placeholder { color: #89938d; }
+    .add-form input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(22, 107, 85, .14); }
+
+    .add-button {
+      width: 48px;
+      height: 48px;
+      flex: 0 0 48px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 4px;
+      color: var(--white);
+      background: var(--green);
+      cursor: pointer;
+      transition: background .16s, transform .16s;
+    }
+
+    .add-button:hover { background: var(--green-dark); }
+    .add-button:active { transform: scale(.96); }
+    .add-button svg { width: 20px; height: 20px; }
+
+    .list-meta {
+      min-height: 22px;
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .options {
+      min-height: 52px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .option {
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+      animation: enter .22s ease both;
+    }
+
+    .option-number {
+      width: 24px;
+      color: #8b9790;
+      font-size: 11px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .option-name {
+      flex: 1;
+      min-width: 0;
+      overflow-wrap: anywhere;
+      font-size: 15px;
+    }
+
+    .remove-button {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      color: #75817a;
+      background: #000;
+      cursor: pointer;
+    }
+
+    .remove-button:hover { color: #a23f30; background: rgba(240, 120, 95, .14); }
+    .remove-button svg { width: 17px; height: 17px; }
+
+    .empty-list {
+      padding: 15px 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .draw-panel {
+      position: relative;
+      overflow: hidden;
+      min-height: 270px;
+      padding: 26px;
+      border-radius: 5px;
+      color: var(--white);
+      background: var(--green);
+      isolation: isolate;
+    }
+
+    .draw-panel::after {
+      position: absolute;
+      z-index: -1;
+      right: -38px;
+      bottom: -90px;
+      width: 210px;
+      aspect-ratio: 1;
+      border: 1px solid rgba(255, 254, 250, .18);
+      border-radius: 50%;
+      box-shadow: 0 0 0 25px rgba(255, 254, 250, .04), 0 0 0 52px rgba(255, 254, 250, .035);
+      content: "";
+    }
+
+    .draw-label {
+      margin: 0;
+      color: #c9dfd2;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .result {
+      min-height: 112px;
+      display: flex;
+      align-items: center;
+      margin: 10px 0 20px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(30px, 4vw, 43px);
+      line-height: 1.08;
+      overflow-wrap: anywhere;
+    }
+
+    .result.is-placeholder { color: #b7cec3; font-size: 21px; font-style: italic; }
+
+    .draw-button {
+      min-height: 48px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 18px;
+      border: 0;
+      border-radius: 4px;
+      color: var(--ink);
+      background: var(--lime);
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background .16s, transform .16s;
+    }
+
+    .draw-button:hover:not(:disabled) { background: #e1f77f; }
+    .draw-button:active:not(:disabled) { transform: translateY(1px); }
+    .draw-button:disabled { color: #b6c6be; background: #315d50; cursor: not-allowed; }
+    .draw-button svg { width: 19px; height: 19px; }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding-top: 17px;
+      border-top: 1px solid rgba(24, 51, 47, .18);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .footer span:last-child { text-align: right; }
+
+    @keyframes enter {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 700px) {
+      .page { padding-top: 22px; }
+      .top-note { font-size: 10px; }
+      .intro { padding: 45px 0 30px; }
+      .workspace { grid-template-columns: 1fr; gap: 30px; padding-top: 25px; }
+      .draw-panel { min-height: 245px; }
+      .result { min-height: 80px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+
+    :root {
+      color-scheme: dark;
+      --paper: #0b0d12;
+      --ink: #e9e7e2;
+      --muted: #9299a3;
+      --line: rgba(190, 208, 222, .2);
+      --green: #17202b;
+      --green-dark: #243445;
+      --lime: #b8c9d5;
+      --coral: #b83246;
+      --white: #f1f0eb;
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    * { letter-spacing: 0; }
+
+    body {
+      min-height: 100vh;
+      color: var(--ink);
+      background: #000;
+    }
+
+    .page {
+      position: relative;
+      width: min(100%, 1120px);
+      min-height: 100vh;
+      padding: 30px clamp(22px, 5vw, 64px) 22px;
+    }
+
+    .topbar {
+      position: relative;
+      z-index: 1;
+      padding-bottom: 18px;
+      border-color: var(--line);
+    }
+
+    .brand { color: #c9d5df; font-size: 12px; }
+    .brand-mark { color: #e5e2dc; background: transparent; font-size: 15px; }
+    .top-note { color: #8994a1; font-size: 10px; }
+
+    main {
+      flex: 1;
+      display: grid;
+      place-items: center;
+    }
+
+    .workspace {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      justify-items: center;
+      padding: 22px 0;
+      border: 0;
+    }
+
+    .draw-panel {
+      width: min(100%, 600px);
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 18px 20px;
+      color: var(--ink);
+      background: transparent;
+      text-align: center;
+    }
+
+    .draw-panel::after {
+      right: 50%;
+      bottom: 100px;
+      width: 270px;
+      transform: translateX(50%);
+      border-color: rgba(184, 201, 213, .09);
+      box-shadow: 0 0 0 25px rgba(184, 201, 213, .025), 0 0 0 52px rgba(184, 201, 213, .018);
+    }
+
+    .draw-label {
+      order: 0;
+      margin: 0 0 22px;
+      color: #aebdca;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .index-emblem {
+      position: relative;
+      z-index: 1;
+      width: 206px;
+      height: 206px;
+      margin: 0 0 20px;
+      overflow: visible;
+      filter: drop-shadow(0 0 24px rgba(113, 153, 184, .18));
+    }
+
+    .emblem-line {
+      fill: none;
+      stroke: #bdcbd5;
+      stroke-width: 1.2;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .emblem-accent { fill: #b83246; stroke: #e2b7bd; stroke-width: .8; }
+    .emblem-faint { fill: none; stroke: rgba(189, 203, 213, .35); stroke-width: .7; }
+
+    .protocol-label {
+      margin: 0 0 12px;
+      color: #aeb7c0;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .result {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 510px);
+      min-height: 92px;
+      justify-content: center;
+      margin: 0 0 19px;
+      color: #f0eee9;
+      font-size: 30px;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+      text-wrap: balance;
+    }
+
+    .result.is-placeholder {
+      color: #828d98;
+      font-size: 17px;
+      font-style: italic;
+    }
+
+    .draw-button {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 330px);
+      min-height: 54px;
+      border: 1px solid #d0717d;
+      border-radius: 2px;
+      color: #fff8f5;
+      background: #8f2638;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      transition: background .18s, box-shadow .18s, transform .18s;
+    }
+
+    .draw-button:hover:not(:disabled) {
+      background: #ad3044;
+      box-shadow: 0 0 24px rgba(184, 50, 70, .25);
+    }
+
+    .draw-button:active:not(:disabled) { transform: translateY(1px); }
+    .draw-button:disabled { color: #777c83; border-color: #454950; background: #25282e; }
+    .draw-button svg { width: 18px; height: 18px; }
+
+    .footer {
+      position: relative;
+      z-index: 1;
+      padding-top: 14px;
+      border-color: var(--line);
+      color: #75808a;
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+
+    button:focus-visible { outline: 2px solid #dbe7ee; outline-offset: 4px; }
+
+    @media (max-width: 700px) {
+      .page { padding-top: 20px; }
+      .top-note { font-size: 9px; }
+      .workspace { padding: 14px 0; }
+      .index-emblem { width: 174px; height: 174px; }
+      .result { min-height: 86px; font-size: 25px; }
+      .draw-panel { padding-right: 8px; padding-left: 8px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .index-emblem { animation: none; }
+    }
+
+    .page {
+      width: 100%;
+      min-height: 100svh;
+      padding: 0;
+      display: grid;
+      place-items: center;
+    }
+
+    .page > main { width: 100%; }
+    .topbar, .footer, .draw-label, .protocol-label { display: none; }
+    .workspace { min-height: 100svh; padding: 0; }
+    .draw-panel {
+      width: min(100%, 1600px);
+      min-height: 100svh;
+      display: grid;
+      grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+      justify-items: center;
+      align-items: stretch;
+      gap: 0;
+      padding: 5vh 20px 8vh;
+    }
+
+    .draw-panel::after { display: none; }
+
+    .scoreboard {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      padding: 0 0 18px;
+      color: #82909c;
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    .scoreboard strong {
+      color: #8fdcff;
+      font-size: 16px;
+      text-shadow: 0 0 8px rgba(52, 163, 255, .85);
+    }
+
+    .score-item { display: inline-flex; align-items: center; gap: 7px; }
+
+    .score-item img {
+      width: auto;
+      height: 28px;
+      max-width: min(34vw, 180px);
+      object-fit: contain;
+    }
+
+    .feedback-actions {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      width: min(100%, 420px);
+      padding: 10px 0 24px;
+    }
+
+    .feedback-actions[hidden] { display: none; }
+
+    .feedback-button {
+      flex: 1;
+      min-height: 42px;
+      border: 1px solid #557386;
+      border-radius: 2px;
+      color: #a6e5ff;
+      background: rgba(35, 65, 82, .35);
+      font-family: "Courier New", monospace;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background .18s, border-color .18s, color .18s;
+    }
+
+    .feedback-button:hover { border-color: #8fdcff; background: rgba(52, 163, 255, .2); }
+
+    .index-emblem {
+      width: 200px;
+      height: 260px;
+      align-self: start;
+      margin: 0;
+      object-fit: contain;
+    }
+
+    .success-unlocks {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .success-unlocks img {
+      width: auto;
+      height: 24px;
+      max-width: 52px;
+    }
+
+    .success-unlocks img[hidden] { display: none; }
+
+    .success-unlocks img[data-required-successes="9"] { cursor: pointer; }
+
+    .failure-unlocks { display: inline-flex; align-items: center; }
+    .failure-unlocks img { width: auto; height: 28px; max-width: 52px; cursor: pointer; }
+    .failure-unlocks img[hidden] { display: none; }
+
+    .video-overlay {
+      position: fixed;
+      z-index: 30;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: rgba(0, 0, 0, .9);
+    }
+
+    .video-overlay[hidden] { display: none; }
+
+    .video-canvas {
+      display: block;
+      width: min(96vw, 1400px);
+      max-height: 90vh;
+      object-fit: contain;
+    }
+
+    .ost-toggle {
+      position: fixed;
+      z-index: 25;
+      right: 24px;
+      bottom: 20px;
+      width: 78px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      filter: drop-shadow(0 0 12px rgba(66, 186, 255, .25));
+    }
+
+    .ost-toggle[hidden] { display: none; }
+    .ost-toggle img { display: block; width: 100%; height: auto; }
+    .ost-toggle:hover { filter: drop-shadow(0 0 18px rgba(66, 186, 255, .65)); }
+
+    .ost-toggle.secondary { left: 24px; right: auto; }
+
+    .draw-button {
+      order: 0;
+      width: min(100%, 380px);
+      min-height: 58px;
+      padding: 0 12px;
+      border: 0;
+      color: #82d8ff;
+      background: transparent;
+      font-family: "Courier New", monospace;
+      font-size: 23px;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-shadow: 0 0 5px #42baff, 0 0 15px rgba(52, 163, 255, .85);
+      transition: opacity .18s, text-shadow .18s;
+    }
+
+    .draw-button:hover:not(:disabled) {
+      background: transparent;
+      box-shadow: none;
+      text-shadow: 0 0 7px #42baff, 0 0 22px #278cff;
+    }
+
+    .draw-button:active:not(:disabled) { transform: translateY(1px); }
+    .draw-button:disabled { color: #456477; background: transparent; }
+
+    .draw-actions {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-items: start;
+      gap: clamp(14px, 3vw, 32px);
+      width: min(100%, 1120px);
+    }
+
+    .draw-actions .draw-button {
+      width: 100%;
+      min-height: 58px;
+      font-size: 18px;
+      line-height: 1.25;
+      text-align: center;
+    }
+
+    .combat-controls {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      column-gap: 12px;
+      row-gap: 8px;
+    }
+
+    .combat-controls .draw-button { grid-column: 1 / -1; }
+
+    .identity-count-range {
+      width: 100%;
+      margin: 0;
+      accent-color: #76d7ff;
+      cursor: pointer;
+    }
+
+    .identity-count-range:disabled { cursor: not-allowed; opacity: .45; }
+
+    #identity-count-random[aria-pressed="true"] {
+      color: #b9edff;
+      text-shadow: 0 0 7px #42baff, 0 0 20px #278cff;
+    }
+
+    .identity-count-value {
+      min-width: 2ch;
+      color: #8fdcff;
+      font-family: "Courier New", monospace;
+      font-size: 14px;
+      text-align: center;
+      text-shadow: 0 0 8px rgba(52, 163, 255, .85);
+    }
+
+    .result {
+      order: 0;
+      min-height: 0;
+      align-self: center;
+      justify-self: center;
+      margin: 0;
+      transform: translateY(-7vh);
+      color: #8fdcff;
+      font-family: "Courier New", monospace;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.5;
+      text-align: center;
+      text-shadow: 0 0 5px #42baff, 0 0 13px rgba(52, 163, 255, .85);
+      overflow-wrap: anywhere;
+      text-wrap: balance;
+      white-space: pre-line;
+    }
+
+    .result[hidden] { display: none; }
+    .result.is-revealing { visibility: hidden; }
+    .result.combat-result {
+      display: block;
+      width: min(100%, 1560px);
+      line-height: 1.8;
+      white-space: normal;
+    }
+
+    .result.many-identities { transform: translateY(-0.5vh); }
+    .result.many-identities .combat-action { transform: translateY(0); }
+    .result.many-identities .combat-identities { margin-top: .7em; }
+
+    .consequence-panel {
+      position: fixed;
+      z-index: 21;
+      top: 50%;
+      left: 50%;
+      width: min(100%, 620px);
+      margin: 0;
+      padding: 16px 20px;
+      border: 1px solid #557f98;
+      color: #b8e9ff;
+      background: #000;
+      font-family: "Courier New", monospace;
+      text-align: center;
+      text-shadow: 0 0 8px rgba(52, 163, 255, .4);
+      transform: translate(-50%, -50%);
+    }
+
+    .consequence-panel[hidden] { display: none; }
+    .consequence-identity {
+      margin: 0 0 12px;
+      color: #8fdcff;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .consequence-message { margin: 0 0 14px; line-height: 1.5; }
+
+    .consequence-backdrop {
+      position: fixed;
+      z-index: 20;
+      inset: 0;
+      background: rgba(0, 0, 0, .62);
+    }
+
+    .consequence-backdrop[hidden] { display: none; }
+
+    .consequence-actions { display: flex; justify-content: center; gap: 12px; }
+
+    .consequence-button {
+      min-width: 110px;
+      min-height: 36px;
+      padding: 0 14px;
+      border: 1px solid #557f98;
+      border-radius: 2px;
+      color: #b8e9ff;
+      background: transparent;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .consequence-button:hover { border-color: #9bdefd; background: rgba(52, 163, 255, .22); }
+
+    .combat-action {
+      display: block;
+      transform: translateY(-20px);
+    }
+
+    .combat-identities {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: .35em 1em;
+      margin-top: 1em;
+    }
+
+    .combat-identities.two-columns {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: clamp(4rem, 8vw, 8rem);
+    }
+
+    .combat-identity {
+      width: 100%;
+      min-width: 0;
+      padding: 0;
+      border: 0;
+      color: inherit;
+      background: transparent;
+      font: inherit;
+      font-size: 20px;
+      text-align: center;
+      text-shadow: inherit;
+      transition: color .15s;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .combat-identity:hover:not(:disabled) { color: #68b8d7; }
+    .combat-identity.is-pending {
+      color: #b8e9ff;
+      text-shadow: 0 0 7px #42baff, 0 0 20px #278cff;
+    }
+    .combat-identity:disabled { opacity: 1; cursor: default; }
+    .combat-identity:focus-visible { outline: 1px solid #8fdcff; outline-offset: 3px; }
+
+    .combat-states {
+      display: grid;
+      gap: .35em;
+      margin-top: 1em;
+    }
+
+    .combat-state { display: block; font-size: 20px; }
+
+    @media (max-width: 1000px) {
+      .combat-identities.two-columns { column-gap: 2rem; }
+      .combat-identity { font-size: 18px; white-space: normal; overflow-wrap: anywhere; }
+      .combat-state { font-size: 18px; }
+    }
+
+    @media (max-width: 700px) {
+      .index-emblem { width: 176px; height: 228px; }
+      .draw-panel { padding: 4vh 18px 7vh; }
+      .draw-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .draw-actions { gap: 12px; }
+      .draw-actions .draw-button { min-height: 66px; padding: 0 4px; font-size: 15px; }
+      .combat-controls { column-gap: 8px; }
+      .scoreboard { gap: 14px; font-size: 10px; }
+      .result { font-size: 18px; }
+      .combat-identities.two-columns { column-gap: 1rem; }
+      .combat-identity { font-size: 16px; }
+      .combat-state { font-size: 16px; }
+      .result { transform: translateY(-5vh); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .index-emblem { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <main>
+      <section class="workspace" aria-label="Selector aleatorio">
+        <section class="draw-panel" aria-label="Prescritos">
+          <div class="scoreboard" aria-label="Recuento de resultados">
+            <span class="score-item">
+              <span class="success-unlocks" id="success-unlocks" aria-label="Desbloqueos de éxito">
+                <img src="desbloqueo - I.webp" alt="Desbloqueo I" data-required-successes="3" hidden>
+                <img src="desbloqueo - II.webp" alt="Desbloqueo II" data-required-successes="6" hidden>
+                <img src="desbloqueo - III.webp" id="video-unlock" alt="Desbloqueo III. Reproducir vídeo" data-required-successes="9" role="button" tabindex="0" hidden>
+                <img src="blacksilence.webp" id="black-silence-unlock" alt="Black Silence. Reproducir vídeo" data-required-successes="18" role="button" tabindex="0" hidden>
+              </span>
+              <img src="Gracia_prescrito.webp" alt="Éxito"><strong id="success-count">0</strong>
+            </span>
+            <span class="score-item">
+              <img src="consecuencia_karmica.webp" alt="Fracaso"><strong id="failure-count">0</strong>
+              <span class="failure-unlocks" id="failure-unlocks" aria-label="Desafío de Hermes">
+                <img src="device.png" id="hermes-unlock" alt="Desafío de Hermes" data-required-failures="25" role="button" tabindex="0" hidden>
+              </span>
+            </span>
+          </div>
+          <img class="index-emblem" src="index-icon.svg.webp" alt="Emblema del Index">
+          <p class="result" id="result" role="status" aria-live="polite" aria-atomic="true" hidden></p>
+          <div class="consequence-backdrop" id="consequence-backdrop" hidden></div>
+          <div class="consequence-panel" id="consequence-panel" role="alertdialog" aria-labelledby="consequence-message" hidden>
+            <p class="consequence-identity" id="consequence-identity"></p>
+            <p class="consequence-message" id="consequence-message">El Index no está contento con tus acciones, puedes seguir con esto pero tendrás consecuencias</p>
+            <div class="consequence-actions">
+              <button class="consequence-button" id="consequence-continue" type="button">Seguir</button>
+              <button class="consequence-button" id="consequence-stop" type="button">Parar</button>
+            </div>
+          </div>
+          <div class="video-overlay" id="video-overlay" role="dialog" aria-label="Desbloqueo de identidad" hidden>
+            <canvas class="video-canvas" id="video-canvas"></canvas>
+          </div>
+          <button class="ost-toggle" id="ost-toggle" type="button" aria-label="Reproducir OST" aria-pressed="false" hidden>
+            <img src="donqui.webp" alt="Reproducir o pausar OST">
+          </button>
+          <button class="ost-toggle secondary" id="city-ost-toggle" type="button" aria-label="Reproducir Children of the City" aria-pressed="false" hidden>
+            <img src="lolang.png" alt="Reproducir o pausar Children of the City">
+          </button>
+          <div class="feedback-actions" id="feedback-actions" hidden>
+            <button class="feedback-button success" id="success-button" type="button">Éxito</button>
+            <button class="feedback-button failure" id="failure-button" type="button">Fracaso</button>
+          </div>
+          <div class="draw-actions">
+            <button class="draw-button" id="common-draw-button" type="button">Recibir prescrito común</button>
+            <div class="combat-controls">
+              <button class="draw-button" id="combat-draw-button" type="button" disabled>Recibir equipo de proxies</button>
+              <input class="identity-count-range" id="identity-count" type="range" min="1" max="12" value="1" aria-label="Cantidad de pecadores" title="Cantidad de pecadores: 1">
+              <output class="identity-count-value" id="identity-count-value" for="identity-count">1</output>
+              <button class="draw-button" id="identity-count-random" type="button" aria-pressed="false">Aleatorio</button>
+            </div>
+            <button class="draw-button" id="state-draw-button" type="button" disabled>Recibir prescrito de estado</button>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <audio id="prescript-audio" src="the-index-message.mp3" preload="auto" hidden></audio>
+  <video id="unlock-video" src="The_House_of_Spiders_The_Index_Nursefather_Yi_Sang_Skill_3-2a-web.mp4" preload="metadata" muted playsinline hidden></video>
+  <audio id="unlock-audio" src="The_House_of_Spiders_The_Index_Nursefather_Yi_Sang_Skill_3-2a.mp3" type="audio/mpeg" preload="auto"></audio>
+  <audio id="ost-audio" src="Limbus Company OST - Call New Index - Lunartique.mp3" type="audio/mpeg" preload="metadata"></audio>
+  <video id="black-silence-video" src="Library of Ruina  Furioso - a shark (720p, h264).mp4" preload="metadata" muted playsinline hidden></video>
+  <audio id="black-silence-audio" src="Library of Ruina  Furioso - a shark.mp3" type="audio/mpeg" preload="auto"></audio>
+  <audio id="city-ost-audio" src="Children of the City - Mili.mp3" type="audio/mpeg" preload="metadata"></audio>
+  <audio id="hermes-audio" src="abandon-weird-route.mp3" type="audio/mpeg" preload="auto"></audio>
+  <script src="prescritos.js"></script>
+  <script src="prescritos-combate.js"></script>
+  <script src="prescritos-hermes.js"></script>
+  <script>
+    const commonPrescripts = PRESCRITOS.filter((prescrito) => typeof prescrito === "string" && prescrito.trim());
+    const combatPrescripts = PRESCRITOS_COMBATE.filter((prescrito) => typeof prescrito === "string" && prescrito.trim());
+    const statePrescripts = PRESCRITOS_ESTADO.filter((estado) => typeof estado === "string" && estado.trim());
+    const hermesPrescripts = PRESCRITOS_HERMES.filter((prescrito) => typeof prescrito === "string" && prescrito.trim());
+    const resultElement = document.querySelector("#result");
+    const commonDrawButton = document.querySelector("#common-draw-button");
+    const combatDrawButton = document.querySelector("#combat-draw-button");
+    const stateDrawButton = document.querySelector("#state-draw-button");
+    const identityCountInput = document.querySelector("#identity-count");
+    const identityCountValue = document.querySelector("#identity-count-value");
+    const identityCountRandomButton = document.querySelector("#identity-count-random");
+    const prescriptAudio = document.querySelector("#prescript-audio");
+    const consequenceBackdrop = document.querySelector("#consequence-backdrop");
+    const consequencePanel = document.querySelector("#consequence-panel");
+    const consequenceIdentity = document.querySelector("#consequence-identity");
+    const consequenceMessage = document.querySelector("#consequence-message");
+    const consequenceContinueButton = document.querySelector("#consequence-continue");
+    const consequenceStopButton = document.querySelector("#consequence-stop");
+    const feedbackActions = document.querySelector("#feedback-actions");
+    const successButton = document.querySelector("#success-button");
+    const failureButton = document.querySelector("#failure-button");
+    const successCountElement = document.querySelector("#success-count");
+    const failureCountElement = document.querySelector("#failure-count");
+    const failureUnlockImage = document.querySelector("#hermes-unlock");
+    const hermesAudio = document.querySelector("#hermes-audio");
+    const successUnlockImages = [...document.querySelectorAll("#success-unlocks img")];
+    const hermesUnlockImage = document.querySelector("#hermes-unlock");
+    const videoUnlockImage = document.querySelector("#video-unlock");
+    const blackSilenceUnlockImage = document.querySelector("#black-silence-unlock");
+    const unlockVideo = document.querySelector("#unlock-video");
+    const blackSilenceVideo = document.querySelector("#black-silence-video");
+    const videoOverlay = document.querySelector("#video-overlay");
+    const videoCanvas = document.querySelector("#video-canvas");
+    const unlockAudio = document.querySelector("#unlock-audio");
+    const blackSilenceAudio = document.querySelector("#black-silence-audio");
+    const ostAudio = document.querySelector("#ost-audio");
+    const ostToggle = document.querySelector("#ost-toggle");
+    const cityOstAudio = document.querySelector("#city-ost-audio");
+    const cityOstToggle = document.querySelector("#city-ost-toggle");
+    const videoContext = videoCanvas.getContext("2d");
+    prescriptAudio.volume = 0.65;
+    const revealGlyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*+-=/?<>";
+    let activeRevealFrame = 0;
+    let activeRevealRequest = 0;
+    let activeIdentityRevealRequest = 0;
+    let identityRerollInProgress = false;
+    let activeResultParts = [];
+    let pendingIdentityPart = null;
+    let pendingConsequenceType = null;
+    let hermesChallengeActive = false;
+    let videoFrameRequest = 0;
+    let activeUnlockVideo = unlockVideo;
+    let activeUnlockAudio = unlockAudio;
+    let activeUnlockId = "index";
+    let unlockVideoFinished = false;
+    let unlockAudioFinished = false;
+    let successCount = 0;
+    let failureCount = 0;
+    const scoreStorageKey = "el-index-score";
+    ostAudio.volume = 0.2;
+    cityOstAudio.volume = 0.2;
+
+    function loadScore() {
+      try {
+        const savedScore = JSON.parse(localStorage.getItem(scoreStorageKey));
+        if (!savedScore || typeof savedScore !== "object") return;
+        successCount = Number.isInteger(savedScore.success) && savedScore.success >= 0
+          ? savedScore.success
+          : 0;
+        failureCount = Number.isInteger(savedScore.failure) && savedScore.failure >= 0
+          ? savedScore.failure
+          : 0;
+      } catch {
+        successCount = 0;
+        failureCount = 0;
+      }
+    }
+
+    function saveScore() {
+      localStorage.setItem(scoreStorageKey, JSON.stringify({
+        success: successCount,
+        failure: failureCount,
+      }));
+    }
+
+    function updateSuccessUnlocks() {
+      const unlockedIndex = successUnlockImages.reduce((lastUnlockedIndex, image, index) => {
+        return successCount >= Number(image.dataset.requiredSuccesses) ? index : lastUnlockedIndex;
+      }, -1);
+
+      successUnlockImages.forEach((image, index) => {
+        image.hidden = index !== unlockedIndex;
+      });
+    }
+
+    function updateFailureUnlock() {
+      failureUnlockImage.hidden = failureCount < Number(failureUnlockImage.dataset.requiredFailures);
+    }
+
+    function setHermesChallengeMode(isActive) {
+      hermesChallengeActive = isActive;
+      commonDrawButton.disabled = isActive || commonPrescripts.length === 0;
+      stateDrawButton.disabled = isActive || combatPrescripts.length === 0 || statePrescripts.length === 0;
+      combatDrawButton.disabled = isActive || combatDrawButton.disabled;
+      identityCountInput.disabled = isActive || identityCountRandomButton.getAttribute("aria-pressed") === "true";
+      identityCountRandomButton.disabled = isActive;
+      if (!isActive) updateCombatAvailability();
+    }
+
+    function drawTransparentVideoFrame() {
+      if (!videoContext || activeUnlockVideo.readyState < 2) return;
+      if (videoCanvas.width !== activeUnlockVideo.videoWidth || videoCanvas.height !== activeUnlockVideo.videoHeight) {
+        videoCanvas.width = activeUnlockVideo.videoWidth;
+        videoCanvas.height = activeUnlockVideo.videoHeight;
+      }
+      videoContext.drawImage(activeUnlockVideo, 0, 0, videoCanvas.width, videoCanvas.height);
+    }
+
+    function scheduleVideoFrame() {
+      if (activeUnlockVideo.paused || activeUnlockVideo.ended) return;
+      if (typeof activeUnlockVideo.requestVideoFrameCallback === "function") {
+        videoFrameRequest = activeUnlockVideo.requestVideoFrameCallback(() => {
+          synchronizeUnlockAudio();
+          drawTransparentVideoFrame();
+          scheduleVideoFrame();
+        });
+        return;
+      }
+
+      videoFrameRequest = requestAnimationFrame(() => {
+        synchronizeUnlockAudio();
+        drawTransparentVideoFrame();
+        scheduleVideoFrame();
+      });
+    }
+
+    function closeUnlockVideo() {
+      activeUnlockVideo.pause();
+      activeUnlockAudio.pause();
+      if (videoFrameRequest && typeof activeUnlockVideo.cancelVideoFrameCallback === "function") {
+        activeUnlockVideo.cancelVideoFrameCallback(videoFrameRequest);
+      } else if (videoFrameRequest) {
+        cancelAnimationFrame(videoFrameRequest);
+      }
+      videoFrameRequest = 0;
+      videoOverlay.hidden = true;
+      videoContext.clearRect(0, 0, videoCanvas.width, videoCanvas.height);
+      unlockVideoFinished = false;
+      unlockAudioFinished = false;
+    }
+
+    function finishUnlockSequence() {
+      closeUnlockVideo();
+      ostToggle.hidden = false;
+      cityOstToggle.hidden = activeUnlockId !== "black-silence";
+    }
+
+    function checkUnlockSequenceFinished() {
+      if (unlockVideoFinished && unlockAudioFinished) finishUnlockSequence();
+    }
+
+    function synchronizeUnlockAudio() {
+      if (activeUnlockVideo.paused || activeUnlockAudio.readyState < 1) return;
+      if (Math.abs(activeUnlockVideo.currentTime - activeUnlockAudio.currentTime) > 0.08) {
+        try {
+          activeUnlockAudio.currentTime = activeUnlockVideo.currentTime;
+        } catch {
+          return;
+        }
+      }
+      if (activeUnlockAudio.paused) activeUnlockAudio.play().catch(() => {});
+    }
+
+    function openUnlockSequence(video, audio, unlockId, requiredSuccesses) {
+      if (successCount < requiredSuccesses) return;
+      activeUnlockVideo = video;
+      activeUnlockAudio = audio;
+      activeUnlockId = unlockId;
+      videoOverlay.hidden = false;
+      ostToggle.hidden = true;
+      cityOstToggle.hidden = true;
+      ostAudio.pause();
+      ostAudio.currentTime = 0;
+      cityOstAudio.pause();
+      cityOstAudio.currentTime = 0;
+      unlockVideoFinished = false;
+      unlockAudioFinished = false;
+      activeUnlockVideo.currentTime = 0;
+      activeUnlockAudio.currentTime = 0;
+      activeUnlockVideo.play().catch(() => {});
+      activeUnlockAudio.play().catch(() => {
+        unlockAudioFinished = true;
+        checkUnlockSequenceFinished();
+      });
+    }
+
+    function bindUnlockImage(image, callback) {
+      image.addEventListener("click", callback);
+      image.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          callback();
+        }
+      });
+    }
+
+    bindUnlockImage(videoUnlockImage, () => openUnlockSequence(unlockVideo, unlockAudio, "index", 9));
+    bindUnlockImage(blackSilenceUnlockImage, () => openUnlockSequence(blackSilenceVideo, blackSilenceAudio, "black-silence", 18));
+    [unlockVideo, blackSilenceVideo].forEach((video) => video.addEventListener("ended", () => {
+      if (video !== activeUnlockVideo) return;
+      unlockVideoFinished = true;
+      checkUnlockSequenceFinished();
+    }));
+    [unlockAudio, blackSilenceAudio].forEach((audio) => audio.addEventListener("ended", () => {
+      if (audio !== activeUnlockAudio) return;
+      unlockAudioFinished = true;
+      checkUnlockSequenceFinished();
+    }));
+    [unlockVideo, blackSilenceVideo].forEach((video) => video.addEventListener("timeupdate", synchronizeUnlockAudio));
+    [unlockAudio, blackSilenceAudio].forEach((audio) => audio.addEventListener("canplay", synchronizeUnlockAudio));
+    [unlockVideo, blackSilenceVideo].forEach((video) => video.addEventListener("play", () => {
+      if (video !== activeUnlockVideo) return;
+      drawTransparentVideoFrame();
+      scheduleVideoFrame();
+    }));
+
+    function toggleAudio(audio, toggle, label) {
+      if (audio.paused) {
+        audio.play().catch(() => {});
+        toggle.setAttribute("aria-pressed", "true");
+        toggle.setAttribute("aria-label", `Pausar ${label}`);
+      } else {
+        audio.pause();
+        toggle.setAttribute("aria-pressed", "false");
+        toggle.setAttribute("aria-label", `Reproducir ${label}`);
+      }
+    }
+
+    ostToggle.addEventListener("click", () => toggleAudio(ostAudio, ostToggle, "OST"));
+    cityOstToggle.addEventListener("click", () => toggleAudio(cityOstAudio, cityOstToggle, "Children of the City"));
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !videoOverlay.hidden) closeUnlockVideo();
+    });
+
+    loadScore();
+    successCountElement.textContent = successCount;
+    failureCountElement.textContent = failureCount;
+    updateSuccessUnlocks();
+    updateFailureUnlock();
+    commonDrawButton.disabled = commonPrescripts.length === 0;
+    stateDrawButton.disabled = combatPrescripts.length === 0 || statePrescripts.length === 0;
+
+    function chooseRandom(items) {
+      return items[Math.floor(Math.random() * items.length)];
+    }
+
+    function chooseRandomUnique(items, count) {
+      const pool = [...items];
+      const chosen = [];
+      while (chosen.length < count) {
+        chosen.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
+      }
+      return chosen;
+    }
+
+    function chooseWeightedCount(maxCount, weights) {
+      const availableWeights = weights.slice(0, maxCount);
+      const totalWeight = availableWeights.reduce((total, weight) => total + weight, 0);
+      let threshold = Math.random() * totalWeight;
+
+      for (let index = 0; index < availableWeights.length; index += 1) {
+        threshold -= availableWeights[index];
+        if (threshold < 0) return index + 1;
+      }
+
+      return availableWeights.length;
+    }
+
+    function playPrescriptAudio(onStart) {
+      prescriptAudio.pause();
+      prescriptAudio.currentTime = 0;
+      let handledStart = false;
+
+      function handleAudioStart() {
+        if (handledStart) return;
+        handledStart = true;
+        prescriptAudio.removeEventListener("playing", handleAudioStart);
+        onStart();
+      }
+
+      prescriptAudio.addEventListener("playing", handleAudioStart);
+      const playRequest = prescriptAudio.play();
+      if (playRequest) {
+        playRequest.catch(() => {
+          prescriptAudio.removeEventListener("playing", handleAudioStart);
+          handleAudioStart();
+        });
+      }
+    }
+
+    function scrambleText(text, resolvedCount) {
+      let characterIndex = 0;
+      return Array.from(text).map((character) => {
+        if (/\s/.test(character)) return character;
+        const resolved = characterIndex < resolvedCount;
+        characterIndex += 1;
+        return resolved
+          ? character
+          : revealGlyphs[Math.floor(Math.random() * revealGlyphs.length)];
+      }).join("");
+    }
+
+    function rerollIdentity(part) {
+      if (identityRerollInProgress) return;
+      const alternatives = part.availableIdentities.filter((identity) => identity !== part.currentIdentity);
+      if (alternatives.length === 0) return;
+
+      if (successCount <= 0) {
+        pendingIdentityPart = part;
+        pendingConsequenceType = "identity";
+        part.element.classList.add("is-pending");
+        consequenceContinueButton.textContent = "Seguir";
+        consequenceStopButton.textContent = "Parar";
+        consequenceIdentity.textContent = `Identidad a cambiar: ${part.text}`;
+        consequenceMessage.textContent = "El Index no está contento con tus acciones, puedes seguir con esto pero tendrás consecuencias";
+        setConsequenceVisibility(true);
+        return;
+      }
+
+      startIdentityReroll(part, false);
+    }
+
+    function startIdentityReroll(part, withConsequence) {
+      const alternatives = part.availableIdentities.filter((identity) => identity !== part.currentIdentity);
+      if (alternatives.length === 0) return;
+
+      part.currentIdentity = chooseRandom(alternatives);
+      part.text = `${part.currentIdentity} [${part.sinner}]`;
+      part.element.setAttribute("aria-label", `${part.text}. Elegir otra identidad`);
+      if (withConsequence) {
+        failureCount += 5;
+        failureCountElement.textContent = failureCount;
+        updateFailureUnlock();
+      } else {
+        successCount -= 1;
+        successCountElement.textContent = successCount;
+        updateSuccessUnlocks();
+      }
+      saveScore();
+      identityRerollInProgress = true;
+      updateIdentityRerollButtons(activeResultParts);
+      const revealRequest = ++activeIdentityRevealRequest;
+
+      function startIdentityReveal() {
+        if (revealRequest !== activeIdentityRevealRequest) return;
+
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          part.element.textContent = part.text;
+          identityRerollInProgress = false;
+          updateIdentityRerollButtons(activeResultParts);
+          return;
+        }
+
+        const characterCount = Array.from(part.text).filter((character) => !/\s/.test(character)).length;
+        const duration = Number.isFinite(prescriptAudio.duration) && prescriptAudio.duration > 0
+          ? prescriptAudio.duration * 1000
+          : Math.min(2400, Math.max(700, characterCount * 24));
+        const startTime = performance.now();
+        part.element.textContent = scrambleText(part.text, 0);
+
+        function revealIdentity(timestamp) {
+          const progress = Math.min((timestamp - startTime) / duration, 1);
+          part.element.textContent = scrambleText(part.text, Math.floor(progress * characterCount));
+
+          if (progress < 1) {
+            part.animationFrame = requestAnimationFrame(revealIdentity);
+            return;
+          }
+
+          part.element.textContent = part.text;
+          part.animationFrame = 0;
+          identityRerollInProgress = false;
+          updateIdentityRerollButtons(activeResultParts);
+        }
+
+        part.animationFrame = requestAnimationFrame(revealIdentity);
+      }
+
+      playPrescriptAudio(startIdentityReveal);
+    }
+
+    function openHermesPrompt() {
+      if (failureCount < 25) return;
+      pendingIdentityPart = null;
+      pendingConsequenceType = "hermes";
+      consequenceIdentity.textContent = "Desafío de Hermes";
+      consequenceMessage.textContent = "¿Has estado recibiendo proxies que no te gustan? La voluntad de la Ciudad está decepcionada contigo. Puedes arreglarlo, pero conllevará un desafío mayor";
+      consequenceContinueButton.textContent = "Aceptar";
+      consequenceStopButton.textContent = "Pasar";
+      setConsequenceVisibility(true);
+    }
+
+    function prepareResultParts(text, combatDetails) {
+      resultElement.replaceChildren();
+      if (!combatDetails) {
+        return [{ element: resultElement, text }];
+      }
+
+      const action = document.createElement("span");
+      action.className = "combat-action";
+      action.textContent = combatDetails.action;
+
+      const identities = document.createElement("span");
+      identities.className = "combat-identities";
+      if (combatDetails.useTwoColumns) identities.classList.add("two-columns");
+
+      const parts = [{ element: action, text: combatDetails.action }];
+      if (combatDetails.type === "state") {
+        const states = document.createElement("span");
+        states.className = "combat-states";
+        combatDetails.states.forEach((state) => {
+          const entry = document.createElement("span");
+          entry.className = "combat-state";
+          entry.textContent = state;
+          states.append(entry);
+          parts.push({ element: entry, text: state });
+        });
+        resultElement.replaceChildren(action, states);
+        return parts;
+      }
+
+      combatDetails.identities.forEach(({ sinner, availableIdentities, currentIdentity }) => {
+        const entry = document.createElement("button");
+        entry.type = "button";
+        entry.className = "combat-identity";
+        entry.textContent = `${currentIdentity} [${sinner}]`;
+        entry.title = `Elegir otra identidad para ${sinner}`;
+        entry.setAttribute("aria-label", `${entry.textContent}. Elegir otra identidad`);
+        entry.style.minWidth = `${Math.max(...availableIdentities.map((identity) => `${identity} [${sinner}]`.length))}ch`;
+        entry.disabled = true;
+        identities.append(entry);
+        const part = {
+          element: entry,
+          text: entry.textContent,
+          isIdentity: true,
+          sinner,
+          currentIdentity,
+          availableIdentities,
+          animationFrame: 0,
+        };
+        entry.addEventListener("click", () => rerollIdentity(part));
+        parts.push(part);
+      });
+
+      resultElement.replaceChildren(action, identities);
+      return parts;
+    }
+
+    function renderScrambledParts(parts, resolvedCount) {
+      let remainingResolved = resolvedCount;
+
+      parts.forEach(({ element, text }) => {
+        const partResolvedCount = Math.min(
+          remainingResolved,
+          Array.from(text).filter((character) => !/\s/.test(character)).length,
+        );
+        element.textContent = scrambleText(text, partResolvedCount);
+        remainingResolved -= partResolvedCount;
+      });
+    }
+
+    function updateIdentityRerollButtons(parts) {
+      parts.filter((part) => part.isIdentity).forEach((part) => {
+        const hasAlternative = part.availableIdentities.some((identity) => identity !== part.currentIdentity);
+        part.element.disabled = identityRerollInProgress || !hasAlternative;
+      });
+    }
+
+    function setConsequenceVisibility(isVisible) {
+      consequencePanel.hidden = !isVisible;
+      consequenceBackdrop.hidden = !isVisible;
+      commonDrawButton.disabled = isVisible || commonPrescripts.length === 0;
+      stateDrawButton.disabled = isVisible || combatPrescripts.length === 0 || statePrescripts.length === 0;
+      combatDrawButton.disabled = isVisible || combatDrawButton.disabled;
+      identityCountInput.disabled = isVisible || identityCountRandomButton.getAttribute("aria-pressed") === "true";
+      identityCountRandomButton.disabled = isVisible;
+      successButton.disabled = isVisible;
+      failureButton.disabled = isVisible;
+      if (!isVisible) {
+        updateCombatAvailability();
+        updateIdentityRerollButtons(activeResultParts);
+      }
+    }
+
+    function resetToInitialState() {
+      activeRevealRequest += 1;
+      activeIdentityRevealRequest += 1;
+      if (activeRevealFrame) cancelAnimationFrame(activeRevealFrame);
+      activeResultParts.forEach((part) => {
+        if (part.animationFrame) cancelAnimationFrame(part.animationFrame);
+      });
+      activeRevealFrame = 0;
+      activeResultParts = [];
+      identityRerollInProgress = false;
+      prescriptAudio.pause();
+      prescriptAudio.currentTime = 0;
+      resultElement.replaceChildren();
+      resultElement.hidden = true;
+      resultElement.classList.remove("is-chosen", "is-revealing", "combat-result");
+      resultElement.setAttribute("aria-live", "polite");
+      pendingIdentityPart = null;
+      pendingConsequenceType = null;
+      hermesChallengeActive = false;
+      setConsequenceVisibility(false);
+      feedbackActions.hidden = true;
+      identityCountInput.disabled = false;
+      identityCountInput.value = "1";
+      identityCountValue.value = "1";
+      identityCountValue.hidden = false;
+      identityCountInput.title = "Cantidad de pecadores: 1";
+      identityCountRandomButton.setAttribute("aria-pressed", "false");
+      updateCombatAvailability();
+    }
+
+    function registerFeedback(isSuccess) {
+      if (hermesChallengeActive) {
+        hermesChallengeActive = false;
+        if (isSuccess) {
+          failureCount = 0;
+          successCount += 3;
+          failureCountElement.textContent = failureCount;
+          successCountElement.textContent = successCount;
+          updateFailureUnlock();
+          updateSuccessUnlocks();
+          saveScore();
+          resetToInitialState();
+          return;
+        }
+
+        showResult("A Hermes no le ha gustado eso");
+        feedbackActions.hidden = true;
+        setHermesChallengeMode(false);
+        hermesAudio.currentTime = 0;
+        hermesAudio.play().catch(() => {});
+        saveScore();
+        return;
+      }
+
+      if (isSuccess) {
+        successCount += 1;
+        successCountElement.textContent = successCount;
+        updateSuccessUnlocks();
+      } else {
+        failureCount += 1;
+        failureCountElement.textContent = failureCount;
+        updateFailureUnlock();
+      }
+      saveScore();
+      resetToInitialState();
+    }
+
+    function showResult(text, combatDetails = null) {
+      const revealRequest = ++activeRevealRequest;
+      activeIdentityRevealRequest += 1;
+      if (activeRevealFrame) cancelAnimationFrame(activeRevealFrame);
+      activeResultParts.forEach((part) => {
+        if (part.animationFrame) cancelAnimationFrame(part.animationFrame);
+      });
+      resultElement.hidden = false;
+      pendingIdentityPart = null;
+      setConsequenceVisibility(false);
+      resultElement.classList.remove("is-chosen");
+      resultElement.classList.toggle("combat-result", combatDetails !== null);
+      resultElement.classList.toggle("many-identities", Boolean(combatDetails?.identities?.length >= 6));
+      resultElement.classList.add("is-revealing");
+      resultElement.setAttribute("aria-live", "off");
+      identityRerollInProgress = false;
+      const resultParts = prepareResultParts(text, combatDetails);
+      activeResultParts = resultParts;
+      feedbackActions.hidden = false;
+      const revealableCount = resultParts.reduce((count, part) => count +
+        Array.from(part.text).filter((character) => !/\s/.test(character)).length, 0);
+      prescriptAudio.pause();
+      prescriptAudio.currentTime = 0;
+
+      function startReveal() {
+        if (revealRequest !== activeRevealRequest) return;
+
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          resultElement.classList.remove("is-revealing");
+          renderScrambledParts(resultParts, revealableCount);
+          updateIdentityRerollButtons(resultParts);
+          resultElement.setAttribute("aria-live", "polite");
+          activeRevealFrame = 0;
+          return;
+        }
+
+        const duration = Number.isFinite(prescriptAudio.duration) && prescriptAudio.duration > 0
+          ? prescriptAudio.duration * 1000
+          : Math.min(2400, Math.max(700, revealableCount * 24));
+        const startTime = performance.now();
+        resultElement.classList.remove("is-revealing");
+        renderScrambledParts(resultParts, 0);
+
+        function revealFrame(timestamp) {
+          const progress = Math.min((timestamp - startTime) / duration, 1);
+          const resolvedCount = Math.floor(progress * revealableCount);
+          renderScrambledParts(resultParts, resolvedCount);
+
+          if (progress < 1) {
+            activeRevealFrame = requestAnimationFrame(revealFrame);
+            return;
+          }
+
+          renderScrambledParts(resultParts, revealableCount);
+          updateIdentityRerollButtons(resultParts);
+          resultElement.setAttribute("aria-live", "polite");
+          activeRevealFrame = 0;
+        }
+
+        activeRevealFrame = requestAnimationFrame(revealFrame);
+      }
+
+      playPrescriptAudio(startReveal);
+    }
+
+    function getAvailableSinners() {
+      return Object.entries(IDENTIDADES_POR_PECADOR)
+        .map(([sinner, identities]) => [
+          sinner,
+          Array.isArray(identities)
+            ? identities.filter((identity) => typeof identity === "string" && identity.trim())
+            : [],
+        ])
+        .filter(([, identities]) => identities.length > 0);
+    }
+
+    function updateCombatAvailability() {
+      const randomModeEnabled = identityCountRandomButton.getAttribute("aria-pressed") === "true";
+      const requiredCount = randomModeEnabled ? 1 : Number(identityCountInput.value);
+      const availableSinners = getAvailableSinners().length;
+      const canDraw = combatPrescripts.length > 0 && availableSinners >= requiredCount;
+      combatDrawButton.disabled = !canDraw;
+      combatDrawButton.title = canDraw
+        ? ""
+        : "Añade acciones y suficientes identidades en prescritos-combate.js";
+    }
+
+    commonDrawButton.addEventListener("click", () => {
+      if (commonPrescripts.length === 0) return;
+      showResult(chooseRandom(commonPrescripts));
+    });
+
+    stateDrawButton.addEventListener("click", () => {
+      if (combatPrescripts.length === 0 || statePrescripts.length === 0) return;
+      const stateCount = chooseWeightedCount(statePrescripts.length, [35, 25, 15, 10, 6, 3, 2, 1]);
+      const states = chooseRandomUnique(statePrescripts, stateCount);
+      const action = chooseRandom(combatPrescripts);
+      showResult(`${action}\n\n${states.join("\n")}`, { type: "state", action, states });
+    });
+
+    identityCountInput.addEventListener("input", () => {
+      identityCountValue.value = identityCountInput.value;
+      identityCountInput.title = `Cantidad de identidades: ${identityCountInput.value}`;
+      updateCombatAvailability();
+    });
+
+    identityCountRandomButton.addEventListener("click", () => {
+      const randomModeEnabled = identityCountRandomButton.getAttribute("aria-pressed") !== "true";
+      identityCountRandomButton.setAttribute("aria-pressed", String(randomModeEnabled));
+      identityCountInput.disabled = randomModeEnabled;
+      identityCountValue.hidden = randomModeEnabled;
+      updateCombatAvailability();
+    });
+
+    combatDrawButton.addEventListener("click", () => {
+      const availableSinners = getAvailableSinners();
+      if (combatPrescripts.length === 0 || availableSinners.length === 0) return;
+      const randomModeEnabled = identityCountRandomButton.getAttribute("aria-pressed") === "true";
+      const maxRandomCount = Math.min(Number(identityCountInput.max), availableSinners.length);
+      const requiredCount = randomModeEnabled
+        ? Math.floor(Math.random() * maxRandomCount) + 1
+        : Number(identityCountInput.value);
+      if (availableSinners.length < requiredCount) return;
+
+      const selectedSinners = [];
+      const sinnerPool = [...availableSinners];
+      while (selectedSinners.length < requiredCount) {
+        selectedSinners.push(sinnerPool.splice(Math.floor(Math.random() * sinnerPool.length), 1)[0]);
+      }
+
+      const identities = selectedSinners.map(([sinner, availableIdentities]) => ({
+        sinner,
+        availableIdentities,
+        currentIdentity: chooseRandom(availableIdentities),
+      }));
+      const action = chooseRandom(combatPrescripts);
+      const text = `${action}\n\n${identities.map(({ currentIdentity, sinner }) =>
+        `${currentIdentity} [${sinner}]`
+      ).join("\n")}`;
+      showResult(text, {
+        action,
+        identities,
+        useTwoColumns: requiredCount > 6,
+      });
+    });
+
+    successButton.addEventListener("click", () => registerFeedback(true));
+    failureButton.addEventListener("click", () => registerFeedback(false));
+    consequenceContinueButton.addEventListener("click", () => {
+      if (pendingConsequenceType === "hermes") {
+        pendingConsequenceType = null;
+        setConsequenceVisibility(false);
+        showResult(chooseRandom(hermesPrescripts));
+        feedbackActions.hidden = false;
+        setHermesChallengeMode(true);
+        return;
+      }
+      if (!pendingIdentityPart) return;
+      const part = pendingIdentityPart;
+      pendingIdentityPart = null;
+      pendingConsequenceType = null;
+      part.element.classList.remove("is-pending");
+      setConsequenceVisibility(false);
+      startIdentityReroll(part, true);
+    });
+    consequenceStopButton.addEventListener("click", () => {
+      if (pendingIdentityPart) pendingIdentityPart.element.classList.remove("is-pending");
+      pendingIdentityPart = null;
+      pendingConsequenceType = null;
+      setConsequenceVisibility(false);
+    });
+
+    bindUnlockImage(hermesUnlockImage, openHermesPrompt);
+
+    updateCombatAvailability();
+  </script>
+</body>
+</html>
