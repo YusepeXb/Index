@@ -17,4 +17,5 @@ const PRESCRITOS_HERMES = [
   "Completa el semanal de ZZZ con tu equipo menos jugado",
   "Tienes un minuto para crashear Garry's Mod",
   "Consigue un logro en Steam",
+  "Completa un Death Wish, si juegas uno que ya te has pasado, deberás hacerlo en menor tiempo",
 ];
